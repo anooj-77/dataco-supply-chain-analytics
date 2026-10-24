@@ -1,0 +1,422 @@
+
+## delivery measures
+
+
+Average Shipping Speed = AVERAGE(DataCoSupplyChainDataset_clean_processing[Shipping_Speed])
+
+AVG Shipping Days = AVERAGE(DataCoSupplyChainDataset_clean_processing[Actual_shipping_days])
+
+AVG Shipping Days = AVERAGE(DataCoSupplyChainDataset_clean_processing[Actual_shipping_days])
+
+Canceled Orders = CALCULATE(COUNTROWS(DataCoSupplyChainDataset_clean_processing),DataCoSupplyChainDataset_clean_processing[Delivery_Status] = "Canceled")
+
+
+Canceled Rate = DIVIDE([Canceled Orders],[Total Orders])
+
+
+Early Delivery Rate = DIVIDE([Early Orders],[Total Orders])
+
+
+Late Delivery Sales = CALCULATE([Total Sales],DataCoSupplyChainDataset_clean_processing[Delivery_Status]="Late")
+
+
+
+Early Orders = CALCULATE(COUNTROWS(DataCoSupplyChainDataset_clean_processing),DataCoSupplyChainDataset_clean_processing[Delivery_Status] = "Early")
+
+
+Late Delivery Rate = DIVIDE([Late Orders],[Total Orders])
+
+Late Orders = CALCULATE(COUNTROWS(DataCoSupplyChainDataset_clean_processing),DataCoSupplyChainDataset_clean_processing[Delivery_Status]= "Late")
+
+
+On Time Orders = CALCULATE(COUNTROWS(DataCoSupplyChainDataset_clean_processing),DataCoSupplyChainDataset_clean_processing[Delivery_Status]= "On Time")
+
+
+On Time Rate = DIVIDE([On Time Orders],[Total Orders])
+
+
+## profitability and sales sum  calculation measures
+
+
+Total Customers = DISTINCTCOUNT(DataCoSupplyChainDataset_clean_processing[Customer_Id])
+
+
+Total Discount = SUM(DataCoSupplyChainDataset_clean_processing[Item_Discount_Amount])
+
+
+Total Orders = DISTINCTCOUNT(DataCoSupplyChainDataset_clean_processing[Order_Id])
+
+Total Profit = SUM(DataCoSupplyChainDataset_clean_processing[Net_Profit])
+
+Total Quantity Sold = SUM(DataCoSupplyChainDataset_clean_processing[Quantity])
+
+Total Sales = SUM(DataCoSupplyChainDataset_clean_processing[Sales])
+
+Profit Margin % = DIVIDE([Total Profit],[Total Sales])
+
+
+
+
+
+
+
+## margin calculation measures
+
+
+Best Category Margin = 
+MAXX(
+    VALUES(DataCoSupplyChainDataset_clean_processing[Category]),[Profit Margin %])
+
+
+
+Best Category Margin YoY % = 
+DIVIDE(
+    [Best Category Margin] - [Previous Year Best Category Margin],
+    [Previous Year Best Category Margin]
+)
+
+
+
+
+LY Profit margin = 
+CALCULATE([Profit Margin %],SAMEPERIODLASTYEAR('Date Table'[Date]))
+
+
+
+Top Product in Profit = 
+MAXX(
+    VALUES(DataCoSupplyChainDataset_clean_processing[Product_ Name]),[Total Profit])
+
+
+## measure includes year 
+
+Previous Year Best Category Margin = 
+CALCULATE(
+    [Best Category Margin],
+    SAMEPERIODLASTYEAR('Date Table'[Date])
+)
+
+
+
+Profit Margin % = DIVIDE([Total Profit],[Total Sales])
+
+
+
+
+Last Year orders = 
+CALCULATE([Total Orders],SAMEPERIODLASTYEAR('Date Table'[Date]))
+
+
+
+
+Last Year profit = 
+CALCULATE([Total Profit],SAMEPERIODLASTYEAR('Date Table'[Date]))
+
+
+
+
+Last Year Sales = 
+CALCULATE(
+    [Total Sales],
+    SAMEPERIODLASTYEAR('Date Table'[Date])
+)
+
+
+
+Previous Year Top Product Profit = 
+CALCULATE(
+    [Top Product in Profit],
+    SAMEPERIODLASTYEAR('Date Table'[Date])
+)
+
+
+
+
+Previous Year Top Product Sales = 
+CALCULATE(
+    [Top Product in sales],
+    SAMEPERIODLASTYEAR('Date Table'[Date])
+)
+
+
+
+Previous Year Unique Products Sold = 
+CALCULATE(
+    [Unique Products sold],
+    SAMEPERIODLASTYEAR('Date Table'[Date])
+)
+
+
+
+## YOY calculation Measures
+ 
+orders YOY% = 
+VAR CY = [Total Orders]
+VAR PY = [Last Year orders]
+VAR _perc = DIVIDE(CY-PY,PY)
+VAR _format = FORMAT( _perc,"0.0%;0.0%")
+RETURN
+IF(
+    _perc>0,
+    UNICHAR(9650) & " " & _format,
+    UNICHAR(9660) & " " & _format)
+
+
+
+pm YOY% = 
+VAR CY = [Profit Margin %]
+VAR PY = [LY Profit margin]
+VAR _perc = DIVIDE(CY-PY,PY)
+VAR _format = FORMAT( _perc,"0.0%;0.0%")
+RETURN
+IF(
+    _perc>0,
+    UNICHAR(9650) & " " & _format,
+    UNICHAR(9660) & " " & _format)
+
+
+profit YOY% = 
+VAR CY = [Total Profit]
+VAR PY = [Last Year profit]
+VAR _perc = DIVIDE(CY-PY,PY)
+VAR _format = FORMAT( _perc,"0.0%;0.0%")
+RETURN
+IF(
+    _perc>0,
+    UNICHAR(9650) & " " & _format,
+    UNICHAR(9660) & " " & _format)
+
+
+
+Sales YOY% = VAR Change = DIVIDE([Total Sales]-[PY Sales],[PY Sales],0)RETURN FORMAT(Change, "+0.00%;-0.00%;0.00%")
+
+
+
+Top Product Profit YoY % = 
+DIVIDE(
+    [Top Product in Profit] - [Previous Year Top Product Profit],
+    [Previous Year Top Product Profit]
+)
+
+
+
+Top Product Sales YoY % = 
+DIVIDE(
+    [Top Product in sales] - [Previous Year Top Product Sales],
+    [Previous Year Top Product Sales]
+)
+
+
+
+
+Unique Products Sold YoY % = 
+DIVIDE(
+    [Unique Products Sold] - [Previous Year Unique Products Sold],
+    [Previous Year Unique Products Sold]
+)
+
+
+
+YOY sales (%) = 
+VAR CY = [Total Sales]
+VAR PY = [Last Year Sales]
+VAR _perc = DIVIDE(CY-PY,PY)
+VAR _format = FORMAT( _perc,"0.0%;0.0%")
+RETURN
+IF(
+    _perc>0,
+    UNICHAR(9650) & " " & _format,
+    UNICHAR(9660) & " " & _format
+)
+
+
+
+## kpi colour and symbol related measures
+
+
+Best Category Margin Indicator = 
+VAR Change = [Best Category Margin YoY %]
+RETURN
+IF(
+    ISBLANK(Change),
+    "— No prior-year data",
+    IF(
+        Change > 0,
+        UNICHAR(9650) & " " & FORMAT(Change, "0.0%") & " YoY",
+        IF(
+            Change < 0,
+            UNICHAR(9660) & " " & FORMAT(ABS(Change), "0.0%") & " YoY",
+            "— 0.0% YoY"
+        )
+    )
+)
+
+
+
+
+Top Product Sales Indicator = 
+VAR Change = [Top Product Sales YoY %]
+RETURN
+IF(
+    ISBLANK(Change),
+    "— No prior-year data",
+    IF(
+        Change > 0,
+        UNICHAR(9650) & " " & FORMAT(Change, "0.0%") & " YoY",
+        IF(
+            Change < 0,
+            UNICHAR(9660) & " " & FORMAT(ABS(Change), "0.0%") & " YoY",
+            "— 0.0% YoY"
+        )
+    )
+)
+
+
+
+
+Unique Products Sold Indicator = 
+VAR Change = [Unique Products Sold YoY %]
+RETURN
+IF(
+    ISBLANK(Change),
+    "— No prior-year data",
+    IF(
+        Change > 0,
+        UNICHAR(9650) & " " & FORMAT(Change, "0.0%") & " YoY",
+        IF(
+            Change < 0,
+            UNICHAR(9660) & " " & FORMAT(ABS(Change), "0.0%") & " YoY",
+            "— 0.0% YoY"
+        )
+    )
+)
+
+
+
+Top Product Profit Indicator = 
+VAR Change = [Top Product Profit YoY %]
+RETURN
+IF(
+    ISBLANK(Change),
+    "— No prior-year data",
+    IF(
+        Change > 0,
+        UNICHAR(9650) & " " & FORMAT(Change, "0.0%") & " YoY",
+        IF(
+            Change < 0,
+            UNICHAR(9660) & " " & FORMAT(ABS(Change), "0.0%") & " YoY",
+            "— 0.0% YoY"
+        )
+    )
+)
+
+
+
+Average Discount Indicator = 
+VAR Change = [Average Discount YoY %]
+RETURN
+IF(
+    ISBLANK(Change),
+    "— No prior-year data",
+    IF(
+        Change > 0,
+        UNICHAR(9650) & " " & FORMAT(Change, "0.0%") & " YoY",
+        IF(
+            Change < 0,
+            UNICHAR(9660) & " " & FORMAT(ABS(Change), "0.0%") & " YoY",
+            "— 0.0% YoY"
+        )
+    )
+)
+
+
+
+
+CF = 
+VAR CY = [Total Sales]
+VAR PY = [Last Year Sales]
+VAR _perc = DIVIDE(CY-PY,PY)
+RETURN
+SWITCH(
+    TRUE(),
+    _perc>0, "green",
+    _perc<0, "red",
+    "grey"
+)
+
+
+
+
+CF 2 = 
+VAR CY = [Total Profit]
+VAR PY = [Last Year profit]
+VAR _perc = DIVIDE(CY-PY,PY)
+RETURN
+SWITCH(
+    TRUE(),
+    _perc>0, "green",
+    _perc<0, "red",
+    "grey"
+)
+
+
+
+CF 3 = 
+VAR CY = [Total Orders]
+VAR PY = [Last Year orders]
+VAR _perc = DIVIDE(CY-PY,PY)
+RETURN
+SWITCH(
+    TRUE(),
+    _perc>0, "green",
+    _perc<0, "red",
+    "grey"
+)
+
+
+
+CF 4 = 
+VAR CY = [Profit Margin %]
+VAR PY = [LY Profit margin]
+VAR _perc = DIVIDE(CY-PY,PY)
+RETURN
+SWITCH(
+    TRUE(),
+    _perc>0, "green",
+    _perc<0, "red",
+    "grey"
+)
+
+
+
+## other measures
+
+
+PY Sales = VAR CurrentYear = SELECTEDVALUE('Date Table'[Year]) RETURN CALCULATE([Total Sales],'Date Table'[Year]=CurrentYear-1)
+
+
+Top Product in sales = 
+MAXX(
+    VALUES(DataCoSupplyChainDataset_clean_processing[Product_ Name]),[Total Sales])
+
+
+
+
+Revenue Per Customer = DIVIDE([Total Sales],[Total Customers])
+
+
+
+Average Discount Rate = AVERAGE(DataCoSupplyChainDataset_clean_processing[Discount_Rate])
+
+Average Orders Value = DIVIDE([Total Sales],[Total Orders])
+
+
+
+Previous Year Average Discount = 
+CALCULATE(
+    [Average Discount Rate],
+    SAMEPERIODLASTYEAR('Date Table'[Date])
+)
+
+
+
