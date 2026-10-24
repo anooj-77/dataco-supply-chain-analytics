@@ -11,20 +11,20 @@ An interactive Power BI dashboard for analyzing sales performance, product and m
 
 Summarizes key business KPIs, sales trends, category performance, customer segments, market performance, and delivery status.
 
-"Sales Overview" <img width="1303" height="738" alt="Screenshot (1)" src="https://github.com/user-attachments/assets/9921d74d-59e6-4ed4-a6d2-48a1d0dd1a8a" />
+<img width="1303" height="738" alt="Screenshot (1)" src="https://github.com/user-attachments/assets/9921d74d-59e6-4ed4-a6d2-48a1d0dd1a8a" />
 
 ### 2. Product & Market Analysis
 
 Explores product and category performance, market comparisons, profitability, and discount-related metrics.
 
-"Product & Market Analysis" <img width="1331" height="744" alt="Screenshot (3)" src="https://github.com/user-attachments/assets/c1e0d09a-b94b-4f8a-a3bf-42fdd95aa992" />
+<img width="1331" height="744" alt="Screenshot (3)" src="https://github.com/user-attachments/assets/c1e0d09a-b94b-4f8a-a3bf-42fdd95aa992" />
 
 
 ### 3. Delivery Performance
 
 Examines delivery status and delivery-related KPIs to support the monitoring of shipping operations and potential delays.
 
-"Delivery Performance" <img width="1325" height="735" alt="Screenshot (4)" src="https://github.com/user-attachments/assets/b9b28331-e6e4-4a2a-80af-c338255ff8d3" />
+<img width="1325" height="735" alt="Screenshot (4)" src="https://github.com/user-attachments/assets/b9b28331-e6e4-4a2a-80af-c338255ff8d3" />
 
 
 ## Tools & Skills
